@@ -103,10 +103,16 @@ func NewChannelSortOptions(sortBy string, sortOrder string, idSort bool) Channel
 
 func (options ChannelSortOptions) Apply(query *gorm.DB) *gorm.DB {
 	if columnName, ok := channelSortColumns[options.SortBy]; ok {
-		return query.Order(clause.OrderByColumn{
-			Column: clause.Column{Name: columnName},
-			Desc:   options.SortOrder != "asc",
-		})
+		// 追加 id 作为次级排序键,避免相同值时顺序随物理存储变动(更新余额等 UPDATE 会移动堆表行)
+		return query.
+			Order(clause.OrderByColumn{
+				Column: clause.Column{Name: columnName},
+				Desc:   options.SortOrder != "asc",
+			}).
+			Order(clause.OrderByColumn{
+				Column: clause.Column{Name: "id"},
+				Desc:   true,
+			})
 	}
 	if options.IDSort {
 		return query.Order(clause.OrderByColumn{
@@ -114,10 +120,20 @@ func (options ChannelSortOptions) Apply(query *gorm.DB) *gorm.DB {
 			Desc:   true,
 		})
 	}
-	return query.Order(clause.OrderByColumn{
-		Column: clause.Column{Name: "priority"},
-		Desc:   true,
-	})
+	// 默认排序:优先级 -> 权重 -> ID,逐级递进确保相同值时顺序确定
+	return query.
+		Order(clause.OrderByColumn{
+			Column: clause.Column{Name: "priority"},
+			Desc:   true,
+		}).
+		Order(clause.OrderByColumn{
+			Column: clause.Column{Name: "weight"},
+			Desc:   true,
+		}).
+		Order(clause.OrderByColumn{
+			Column: clause.Column{Name: "id"},
+			Desc:   true,
+		})
 }
 
 func resolveChannelSortOptions(idSort bool, sortOptions []ChannelSortOptions) ChannelSortOptions {
