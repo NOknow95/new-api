@@ -3949,6 +3949,7 @@
     "Return vector embeddings for inputs": "为输入返回向量嵌入",
     "Reveal API key": "显示 API 密钥",
     "Reveal key": "显示密钥",
+    "Reveal the saved key for this channel.": "显示该渠道已保存的密钥。",
     "Revenue": "收入",
     "Review & initialize": "审核并初始化",
     "Review and sign out devices currently using your account.": "查看并退出当前正在使用您账号的设备。",

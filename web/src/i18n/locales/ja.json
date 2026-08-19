@@ -3949,6 +3949,7 @@
     "Return vector embeddings for inputs": "入力に対してベクトル埋め込みを返却",
     "Reveal API key": "APIキーを表示",
     "Reveal key": "キーを表示",
+    "Reveal the saved key for this channel.": "このチャネルの保存されたキーを表示します。",
     "Revenue": "収益",
     "Review & initialize": "確認して初期化",
     "Review and sign out devices currently using your account.": "現在アカウントを使用しているデバイスを確認し、サインアウトできます。",
