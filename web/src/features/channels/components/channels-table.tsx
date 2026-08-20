@@ -24,7 +24,7 @@ import type {
   SortingState,
   Row,
 } from '@tanstack/react-table'
-import { Eye, EyeOff, RefreshCw } from 'lucide-react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -37,7 +37,6 @@ import {
 } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
 import {
   Tooltip,
   TooltipContent,
@@ -463,27 +462,15 @@ export function ChannelsTable() {
           },
         ],
         afterFilters: (
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  variant='ghost'
-                  size='icon'
-                  onClick={() => refetch()}
-                  aria-label={t('Refresh')}
-                  disabled={isFetching}
-                  className='text-muted-foreground hover:text-foreground size-8'
-                >
-                  <RefreshCw
-                    className={cn('size-4', isFetching && 'animate-spin')}
-                  />
-                </Button>
-              }
-            >
-              {t('Refresh')}
-            </TooltipTrigger>
-            <TooltipContent>{t('Refresh')}</TooltipContent>
-          </Tooltip>
+          <Button
+            type='button'
+            onClick={() => refetch()}
+            aria-label={t('Refresh')}
+            disabled={isFetching}
+          >
+            {isFetching && <Loader2 className='animate-spin' />}
+            {t('Refresh')}
+          </Button>
         ),
         preActions: (
           <Tooltip>
